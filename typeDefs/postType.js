@@ -14,12 +14,21 @@ module.exports = gql`
     image: ImageInput
   }
 
+  input UpdatePostInput {
+    _id: String!
+    content: String!
+    image: ImageInput
+  }
+
   type Query {
     allPosts: [Post!]!
     userPosts: [Post!]!
+    singlePost(postId: String!): Post!
   }
 
   type Mutation {
     createPost(input: CreatePostInput!): Post!
+    updatePost(input: UpdatePostInput!): Post!
+    deletePost(postId: String!): Post!
   }
 `;
