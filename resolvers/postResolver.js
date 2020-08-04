@@ -82,8 +82,14 @@ const deletePost = async (_, args, { req }) => {
   return deletedPost;
 };
 
+const search = async (_, { query }) => {
+  return await Post.find({ $text: { $search: query } })
+    .populate("postedBy", "username")
+    .exec();
+};
+
 module.exports = {
-  Query: { allPosts, userPosts, singlePost, totalPosts },
+  Query: { allPosts, userPosts, singlePost, totalPosts, search },
   Mutation: {
     createPost,
     updatePost,
