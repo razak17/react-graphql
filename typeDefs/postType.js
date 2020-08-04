@@ -21,9 +21,10 @@ module.exports = gql`
   }
 
   type Query {
-    allPosts: [Post!]!
+    allPosts(page: Int): [Post!]!
     userPosts: [Post!]!
     singlePost(postId: String!): Post!
+    totalPosts: Int!
   }
 
   type Mutation {

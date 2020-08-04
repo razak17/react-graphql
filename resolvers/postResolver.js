@@ -6,8 +6,12 @@ const Post = require("../models/Post");
 
 // Query
 const allPosts = async (_, args) => {
+  const currentPage = args.page || 1;
+  const postsPerPage = 3;
   return await Post.find({})
+    .skip((currentPage - 1) * postsPerPage)
     .populate("postedBy", "_id username")
+    .limit(postsPerPage)
     .sort({ createdAt: -1 })
     .exec();
 };
@@ -27,6 +31,10 @@ const userPosts = async (_, args, { req }) => {
   return await Post.find({ postedBy: postCreator })
     .populate("postedBy", "_id username")
     .sort({ createdAt: -1 });
+};
+
+const totalPosts = async (_, args) => {
+  return await Post.find({}).estimatedDocumentCount().exec();
 };
 
 // Mutation
@@ -75,7 +83,7 @@ const deletePost = async (_, args, { req }) => {
 };
 
 module.exports = {
-  Query: { allPosts, userPosts, singlePost },
+  Query: { allPosts, userPosts, singlePost, totalPosts },
   Mutation: {
     createPost,
     updatePost,
